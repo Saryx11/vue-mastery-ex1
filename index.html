@@ -1,6 +1,51 @@
-<div id="app">
-    <h1>{{ product }}</h1>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>App produit</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="nav-bar"></div>
+    <div id="app">
+        <div class="product">
+            <div class="product-image">
+                <img v-bind:src="image" :alt="altText">
+            </div>
+            <div class="product-info">
+                <h1>{{ product }}</h1>
+                <p>{{description}}</p>
+                <p v-if="inventory>10">Disponible</p>
+                <p v-else-if="inventory <= 10 && inventory > 0">Derniers exemplaires</p>
+                <p v-else
+                   :class="{line: inventory==0}">Rupture</p>
+                <p v-if="onSale">En soldes</p>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-<script src="main.js"></script>
+                <ul>
+                    <li v-for="detail in details">{{detail}}</li>
+                </ul>
+                <ul>
+                    <li v-for="taille in tailles">{{taille}}</li>
+                </ul>
+                <div v-for="variant in variants" 
+                     :key="variant.variantId"
+                     class="color-box"
+                     :style="{ backgroundColor: variant.variantColor}"
+                     @mouseover="updateProduct(variant.variantImage)">
+                </div>
+
+                <button v-on:Click="addToCart" 
+                        :disabled="cart==inventory"
+                        :class="{disabledButton:inventory==0 }">Ajouter au panier</button>
+                <button @Click="deleteFromCart">Enlever du panier</button>
+
+                <div class="cart">
+                    <p>Panier({{cart}})</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
